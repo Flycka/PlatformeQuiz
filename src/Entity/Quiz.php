@@ -43,16 +43,15 @@ class Quiz
     #[ORM\JoinColumn(nullable: false)]
     private ?User $formateur = null;
 
-    #[ORM\ManyToOne(inversedBy: 'quizzes')]
-    private ?Status $Status = null;
+    #[ORM\OneToMany(mappedBy: 'idquiz', targetEntity: Copies::class)]
+    private Collection $copies;
 
-    #[ORM\OneToMany(mappedBy: 'quiz_id', targetEntity: Reponses::class)]
-    private Collection $reponses;
 
     public function __construct()
     {
         $this->questions = new ArrayCollection();
         $this->reponses = new ArrayCollection();
+        $this->copies = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -176,42 +175,30 @@ class Quiz
         return $this;
     }
 
-    public function getStatus(): ?Status
-    {
-        return $this->Status;
-    }
-
-    public function setStatus(?Status $Status): self
-    {
-        $this->Status = $Status;
-
-        return $this;
-    }
-
     /**
-     * @return Collection<int, Reponses>
+     * @return Collection<int, Copies>
      */
-    public function getReponses(): Collection
+    public function getCopies(): Collection
     {
-        return $this->reponses;
+        return $this->copies;
     }
 
-    public function addReponse(Reponses $reponse): self
+    public function addCopy(Copies $copy): self
     {
-        if (!$this->reponses->contains($reponse)) {
-            $this->reponses->add($reponse);
-            $reponse->setQuizId($this);
+        if (!$this->copies->contains($copy)) {
+            $this->copies->add($copy);
+            $copy->setIdquiz($this);
         }
 
         return $this;
     }
 
-    public function removeReponse(Reponses $reponse): self
+    public function removeCopy(Copies $copy): self
     {
-        if ($this->reponses->removeElement($reponse)) {
+        if ($this->copies->removeElement($copy)) {
             // set the owning side to null (unless already changed)
-            if ($reponse->getQuizId() === $this) {
-                $reponse->setQuizId(null);
+            if ($copy->getIdquiz() === $this) {
+                $copy->setIdquiz(null);
             }
         }
 

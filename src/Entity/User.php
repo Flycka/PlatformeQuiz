@@ -57,10 +57,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'formateur', targetEntity: Quiz::class)]
     private Collection $quizzes;
 
+    #[ORM\OneToMany(mappedBy: 'iduser', targetEntity: Copies::class)]
+    private Collection $copies;
+
     public function __construct()
     {
         $this->reponses = new ArrayCollection();
         $this->quizzes = new ArrayCollection();
+        $this->copies = new ArrayCollection();
     }
 
 
@@ -184,6 +188,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($quiz->getFormateur() === $this) {
                 $quiz->setFormateur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Copies>
+     */
+    public function getCopies(): Collection
+    {
+        return $this->copies;
+    }
+
+    public function addCopy(Copies $copy): self
+    {
+        if (!$this->copies->contains($copy)) {
+            $this->copies->add($copy);
+            $copy->setIduser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCopy(Copies $copy): self
+    {
+        if ($this->copies->removeElement($copy)) {
+            // set the owning side to null (unless already changed)
+            if ($copy->getIduser() === $this) {
+                $copy->setIduser(null);
             }
         }
 

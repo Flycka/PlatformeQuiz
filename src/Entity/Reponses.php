@@ -35,7 +35,7 @@ class Reponses
 
     #[ORM\ManyToOne(inversedBy: 'reponses')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Quiz $quiz_id = null;
+    private ?Copies $copie = null;
 
     public function getId(): ?int
     {
@@ -103,15 +103,16 @@ class Reponses
         return $this;
     }
 
-    public function getQuizId(): ?Quiz
+    public function getCopie(): ?Copies
     {
-        return $this->quiz_id;
+        return $this->copie;
     }
 
-    public function setQuizId(?Quiz $quiz_id): self
+    public function setCopie(?Copies $copie): self
     {
-        $this->quiz_id = $quiz_id;
+        $this->copie = $copie;
 
         return $this;
     }
+
 }

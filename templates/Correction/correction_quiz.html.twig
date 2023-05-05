@@ -4,26 +4,31 @@
     <h1>Correction Quiz</h1>
     <p>Quiz: {{ quiz.titre }}</p>
 
-    <table>
-        <thead>
-        <tr>
-            <th>Question</th>
-            <th>Note maximale</th>
-            <th>Réponse étudiant</th>
-            <th>Commentaire</th>
-            <th>Note</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for question in questions %}
+    <form method="post">
+        <table>
+            <thead>
             <tr>
-                <td>{{ question.question }}</td>
-                <td>{{ question.noteMaximalequestion }}</td>
-
-
+                <th>Question</th>
+                <th>Note maximale</th>
+                <th>Réponse étudiant</th>
+                <th>Commentaire</th>
+                <th>Note</th>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            
+            {% for reponse in reponses %}
+                <tr>
+                    <td>{{ reponse.getIdQuestion.question }}</td>
+                    <td>{{ reponse.getIdQuestion.noteMaximalequestion }}</td>
+                    <td>{{ reponse.reponse }}</td>
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <button type="submit">Enregistrer les notes et commentaires</button>
+    </form>
 
 {% endblock %}

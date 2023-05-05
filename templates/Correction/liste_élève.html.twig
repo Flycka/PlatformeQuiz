@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des quiz{% endblock %}
+
+{% block body %}
+<h1>élèves</h1>
+
+            {% for user in users  %}
+
+                <li><a href="{{ path('liste_quiz_user', {'id': user.id}) }}">{{ user.Username }}</a></li>
+            {% endfor %}
+
+
+{% endblock %}

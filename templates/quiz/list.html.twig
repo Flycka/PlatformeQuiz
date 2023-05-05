@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des quiz{% endblock %}
+
+{% block body %}
+    <h1>Listes des quiz</h1>
+
+        {% if is_granted('ROLE_FORMA') %}
+            <ul>
+                {% for quiz in quizzes %}
+                    <li>
+                        <p>{{ quiz.titre }} , Date de début : {{ quiz.dateDebut | date('d/m/y H:i') }} , Date de fin : {{ quiz.dateFin | date('d/m/y H:i') }} , Note Maximale : {{ quiz.noteMaximale }}
+                        <a href="{{ path('modif_quiz', { 'id': quiz.id }) }}">Modifier Quiz</a>
+                        <a href="{{ path('supprimer_quiz', { 'id': quiz.id }) }}">Supprimer Quiz</a>
+                    </li>
+                {% endfor %}
+        <a href="{{ path('app_quiz_acceuilF') }}">Retour</a>
+            </ul>
+        {% endif %}
+
+
+    {% if is_granted('ROLE_APPRE') %}
+        <ul>
+            {% for quiz in quizzes %}
+                {% if quiz.formation.id == app.user.formation %}
+                    <div>
+
+                        <p>{{ quiz.titre }}, Date de début : {{ quiz.dateDebut | date('d/m/y H:i') }}, Date de fin : {{ quiz.dateFin | date('d/m/y H:i') }}</p>
+                        {% if quiz.dateDebut <= now and quiz.dateFin >= now %}
+                            <p>Note maximale : {{ quiz.noteMaximale }} <a href="{{ path('quiz_vue_app', { 'id': quiz.id }) }}">Lancer le Test</a></p>
+                        {% elseif quiz.dateFin < now %}
+                            <p>Le quiz est terminé.</p>
+                        {% else %}
+                            <p>Le quiz n'est pas encore disponible.</p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <a href="{{ path('app_quiz_acceuilA') }}">Retour</a>
+        </ul>
+    {% endif %}
+
+
+{% endblock %}

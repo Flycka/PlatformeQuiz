@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Quiz de {{ user.username }}{% endblock %}
+
+{% block body %}
+    <h1>Quiz de {{ user.username }}</h1>
+
+    <ul>
+        {% for quiz in quizzes %}
+            {% set quizDisplayed = false %}
+            {% for reponse in reponses %}
+        {% if reponse.getQuizId().getId() == quiz.id and reponse.getApprenant().getId() == user.id and quiz.id not in quizIds %}
+                    {% set quizDisplayed = true %}
+                    <li>{{ quiz.titre }}</li>
+            <a href="{{ path('correction_quiz', { 'id': quiz.id }, { 'idu' : user.id })}}">Corriger Quiz</a>
+                    {% set quizIds = quizIds|merge([quiz.id]) %} {# Ajouter l'identifiant du quiz affiché à la liste #}
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    </ul>
+{% endblock %}
+

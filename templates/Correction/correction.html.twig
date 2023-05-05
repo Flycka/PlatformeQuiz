@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Correction du quiz "{{ quiz.titre }}"{% endblock %}
+
+{% block body %}
+    <h1>Correction du quiz "{{ quiz.titre }}"</h1>
+    <p>Note maximale : {{ quiz.noteMaximale }}</p>
+
+    <h2>Questions :</h2>
+
+    {{ form_start(form) }}
+    <ul>
+        {% for question in quiz.questions %}
+            <li>
+                {{ question.question }}
+
+
+            </li>
+        {% endfor %}
+    </ul>
+
+    {{ form_end(form) }}
+{% endblock %}

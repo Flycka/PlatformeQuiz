@@ -1,0 +1,48 @@
+<title>{% block title %} Espace élève {% endblock %}</title>
+
+{% block body %}
+   <h1>Apprenant</h1>
+{% endblock %}
+
+{% if is_granted('ROLE_APPRE') %}
+   <div class="login" > <a  href="{{ path('app_logout') }}">Déconnexion</a> </div>
+{% endif %}
+
+<br><br>
+<div Class="Bouton">   <a href="{{ path('quiz_list') }}">Liste des Quiz</a>                      </div>
+
+
+
+
+<style>
+   h1{
+      text-align: center;
+   }
+   .login{
+      text-decoration: none;
+      color: black;
+      margin-left: 90%;
+      border: black solid 2px;
+      padding: 1%;
+      background-color: black;
+      text-align: center;
+   }
+   .Bouton{
+      margin-left:45%;
+      margin-right:45%;
+      margin-bottom: 2em;
+      border: black solid 2px;
+      padding: 1%;
+      background-color: black;
+      text-align: center;
+   }
+   a{
+      text-decoration: none;
+      color: white;
+      height: 100%;
+      width: 100%;
+   }
+   a:hover {
+      color: deepskyblue;
+   }
+</style>

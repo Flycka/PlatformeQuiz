@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Quiz{{ quiz.titre }}{% endblock %}
+
+{% block body %}
+    <h2>Questions :</h2>
+
+    {{ form_start(form) }}
+    <ul>
+        {% for question in quiz.questions %}
+            <li>
+                {{ form_label(form['reponses_' ~ loop.index0], question.question) }}
+                {{ form_widget(form['reponses_' ~ loop.index0]) }}
+            </li>
+        {% endfor %}
+    </ul>
+    {{ form_widget(form.submit) }}
+    {{ form_end(form) }}
+{% endblock %}

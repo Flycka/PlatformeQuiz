@@ -22,10 +22,11 @@ quiz_show:
     path: /quiz/detail_quiz/{id}
     controller: App\Controller\QuizlistController::quizdetail
 
-liste_quiz_user:
-    path: '/user/{id}/quizzes'
-    controller: 'App\Controller\QuizController::listeQuizUser'
-
 correction_quiz:
-    path: /user/{id}/correction
-    controller: App\Controller\QuizController::correctionQuiz
+    path: /quiz/{id}/copies
+    controller: App\Controller\QuizlistController::correctionQuiz
+
+liste_eleves:
+    path: /liste_eleves
+    controller: App\Controller\QuizlistController::listeEleves
+

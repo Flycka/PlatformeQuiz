@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Reponses;
 use App\Entity\User;
 
+use App\Repository\CopiesRepository;
 use App\Repository\QuizRepository;
 use App\Repository\ReponsesRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,12 +21,13 @@ class QuizController extends AbstractController
 
     private QuizRepository $quizRepository;
     private ReponsesRepository $reponsesRepository;
+    private CopiesRepository $copieRepository;
 
-    public function __construct(QuizRepository $quizRepository, ReponsesRepository $reponsesRepository)
+    public function __construct(QuizRepository $quizRepository, ReponsesRepository $reponsesRepository, CopiesRepository $copieRepository)
     {
         $this->quizRepository = $quizRepository;
         $this->reponsesRepository = $reponsesRepository;
-
+        $this->copieRepository = $copieRepository;
     }
     /**
      * @Route("/quiz/creer", name="crea_quiz")
@@ -99,22 +101,6 @@ class QuizController extends AbstractController
     public function confirmation(): Response
     {
         return $this->render('quiz/AcceuilFormateur.html.twig');
-    }
-
-    /**
-     * @Route("/user/{id}/quizzes", name="liste_quiz_user")
-     */
-    public function listeQuizUser(EntityManagerInterface $entityManager,User $user) : Response
-    {
-        $quizzes = $this->quizRepository->findAll();
-        $reponses = $this->reponsesRepository->findAll();
-        $quizIds = array(); // Initialiser la liste des ids de quiz déjà affichés
-        return $this->render('Correction/liste_quiz_user.html.twig', [
-            'user' => $user,
-            'quizzes' => $quizzes,
-            'reponses' => $reponses,
-            'quizIds' => $quizIds // Passer la liste à la vue
-        ]);
     }
 
 }

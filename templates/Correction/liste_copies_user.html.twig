@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des copies de {{ user.username }}{% endblock %}
+
+{% block body %}
+    <h1>Liste des copies de {{ user.username }}</h1>
+
+    <ul>
+        {% for copy in copies %}
+            <li>
+                {{ copy.getIdquiz().titre }}
+                <a href="{{ path('correction_quiz', {'id': copy.id}) }}">Corriger</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -7,8 +7,6 @@
 
             {% for user in users  %}
 
-                <li><a href="{{ path('liste_quiz_user', {'id': user.id}) }}">{{ user.Username }}</a></li>
+                <li><a href="{{ path('liste_copies_user', {'id': user.id}) }}">{{ user.Username }}</a></li>
             {% endfor %}
-
-
 {% endblock %}

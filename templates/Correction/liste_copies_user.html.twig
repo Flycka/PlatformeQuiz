@@ -3,14 +3,50 @@
 {% block title %}Liste des copies de {{ user.username }}{% endblock %}
 
 {% block body %}
-    <h1>Liste des copies de {{ user.username }}</h1>
+    <h1 align="center">Liste des copies de {{ user.username }}</h1>
 
-    <ul>
+    <ul id="copies">
         {% for copy in copies %}
             <li>
-                {{ copy.getIdquiz().titre }}
-                <a href="{{ path('correction_quiz', {'id': copy.id}) }}">Corriger</a>
+                {{ copy.getIdquiz().titre }} {# Affiche le titre du quiz de la copie #}
+
+                {% if is_granted('ROLE_FORMA') %}
+                {% if copy.getAnnotationGlobale() is empty and copy.getNoteMaxQuiz() is null %}
+                    {# Vérifie si l'annotation globale et la note globale de la copie sont vides #}
+                    <a href="{{ path('correction_quiz', {'id': copy.id}) }}">Corriger la copie</a>
+                    {# Affiche un lien pour corriger la copie si elle n'a pas encore été corrigée #}
+                {% else %}
+                    <span>Copie déjà corrigée</span>
+                    {# Affiche un texte indiquant que la copie a déjà été corrigée #}
+                {% endif %}
             </li>
+                {% endif %}
+            {% if is_granted('ROLE_APPRE') %}
+            <a href="{{ path('correction_quiz', {'id': copy.id}) }}">Voir Copie</a>
+            {% endif %}
         {% endfor %}
     </ul>
+    <style>
+#copies{
+    margin: auto;
+    width: 50%;
+
+    color: #FFFFFF;
+}
+span{
+    color: #93c5fd;
+}
+li{
+    margin: auto;
+    margin-bottom: 1em;
+    background-color: #535353;
+    padding: 1em;
+    width: 40%;
+}
+a{
+    text-decoration: none;
+    color: cyan;
+}
+
+    </style>
 {% endblock %}

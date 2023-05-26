@@ -1,6 +1,52 @@
+
+
+<div id="Quiz">
 {{ form_start(form) }}
-{{ form_row(form.question) }}
-{{ form_row(form.noteMaximalequestion ) }}
-<button type="submit" name="action" value="save_and_continue">Enregistrer et continuer</button>
-<button type="submit" name="action" value="save_and_quit">Enregistrer et quitter</button>
-{{ form_end(form) }}
+<p class="DesignForm">
+    <label>{{ form_label(form.question) }}</label>
+    {{ form_widget(form.question) }}
+</p>
+<p class="DesignForm">
+    <label>Points à attribué</label>
+    {{ form_widget(form.noteMaximalequestion) }}
+</p>
+<button  id="submit" type="submit" name="action" value="save_and_continue">Enregistrer et continuer</button>
+<button  id="submit" type="submit" name="action" value="save_and_quit">Enregistrer et quitter</button>
+    {{ form_end(form) }} </div>
+
+
+<style>
+    #Quiz{
+
+        margin: 10% auto 10% auto;
+        padding: 2em;
+        text-align: center;
+        background-color: #7f7f7f;
+        border-radius: 15%;
+        color: #FFFFFF;
+        width: 30%;
+    }
+    .DesignForm{
+
+        margin-bottom: 1em;
+    }
+    .DesignForm label {
+
+        margin-right: 1em;
+    }
+    #submit {
+        border-radius: 25%;
+        background-color: #535353;
+        color: rgb(255, 255, 255);
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: 1px solid #7f7f7f;
+        cursor: pointer;
+        width: 30%;
+    }
+    #submit:hover {
+        background-color: white;
+        color: #000000;
+        border: 1px solid #FFDC14;
+    }
+</style>

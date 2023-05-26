@@ -1,34 +1,68 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Hello CopieSuiviController!{% endblock %}
+
 {% block body %}
-    <h1>Correction Quiz</h1>
-    <p>Quiz: {{ quiz.titre }}</p>
+    {% if is_granted('ROLE_FORMA') %}
 
-    <form method="post">
-        <table>
-            <thead>
-            <tr>
-                <th>Question</th>
-                <th>Note maximale</th>
-                <th>Réponse étudiant</th>
-                <th>Commentaire</th>
-                <th>Note</th>
-            </tr>
-            </thead>
-            <tbody>
-            
+        {% for question in questions %}
+            <p class="question-description">{{ question.question }} {{ question.noteMaximalequestion }}</p>
             {% for reponse in reponses %}
-                <tr>
-                    <td>{{ reponse.getIdQuestion.question }}</td>
-                    <td>{{ reponse.getIdQuestion.noteMaximalequestion }}</td>
-                    <td>{{ reponse.reponse }}</td>
+                {% if reponse.idQuestion.getId() == question.id %}
+                    <p>Réponse : {{ reponse.getReponse() }}</p>
+                    <div>
+                        Annotation : <br/>
+                        <label>
+                            <input name="annotation-{{ reponse.id }}">{{ reponse.annotationQuestion }}</input>
+                        </label>
+                    </div>
+                    <div>
+                        Note de la question : <br/>
+                        <label>
+                            <input name="note-{{ reponse.id }}" value="{{ reponse.noteReponse }}" type="number" min="0" max="{{ question.noteMaximalequestion }}"/>
+                        </label>
+                    </div>
 
-                </tr>
+                {% endif %}
             {% endfor %}
-            </tbody>
-        </table>
+        {% endfor %}
 
-        <button type="submit">Enregistrer les notes et commentaires</button>
-    </form>
+        <h1>Annotation générale</h1>
+        <label>
+            <textarea name="annotation-copie">{{ copie.annotationGlobale }}</textarea>
+        </label>
 
+        <h1>Note de la copie</h1>
+        <label>
+            <input name="note-copie" value="{{ copie.noteMaxQuiz }}" type="number" min="0" max="{{ quizNoteMax }}"/>
+        </label>
+        <br/>
+        <button type="submit">Valider</button>
+
+    {% endif %}
+
+    {% if is_granted('ROLE_APPRE') %}
+
+        {% for question in questions %}
+            <p class="question-description">{{ question.getQuestion() }} {{ question.getNoteMaximalequestion() }}</p>
+            {% for reponse in question.getIdqreponses() %}
+                <p>Réponse : {{ reponse.getReponse() }}</p>
+                <div>
+                    Annotation : <br/>
+                    {{ reponse.getAnnotationQuestion() }}
+                </div>
+                <div>
+                    Note de la question : <br/>
+                    {{ reponse.getNoteReponse() }}
+                </div>
+
+            {% endfor %}
+        {% endfor %}
+
+        <h1>Annotation générale</h1>
+        {{ copie.getAnnotationGlobale() }}
+
+        <h1>Note de la copie</h1>
+        {{ copie.getNoteMaxQuiz() }}
+    {% endif %}
 {% endblock %}

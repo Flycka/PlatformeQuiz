@@ -42,7 +42,7 @@ class Reponses
         return $this->id;
     }
 
-    public function getIdQuestion(): ?Questions
+    public function getIdQuestion(): Questions
     {
         return $this->idQuestion;
     }

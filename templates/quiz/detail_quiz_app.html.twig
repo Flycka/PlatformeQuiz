@@ -3,17 +3,41 @@
 {% block title %}Quiz{{ quiz.titre }}{% endblock %}
 
 {% block body %}
-    <h2>Questions :</h2>
+    <div id="Quiz">
+    <h2 align="center">Questions :</h2>
 
     {{ form_start(form) }}
-    <ul>
+    <ul id="formaul">
         {% for question in quiz.questions %}
-            <li>
+            <div id="formali">
                 {{ form_label(form['reponses_' ~ loop.index0], question.question) }}
                 {{ form_widget(form['reponses_' ~ loop.index0]) }}
-            </li>
+            </div>
         {% endfor %}
     </ul>
-    {{ form_widget(form.submit) }}
-    {{ form_end(form) }}
+   {{ form_widget(form.submit) }}
+    {{ form_end(form) }}</div>
+
+
+<style>
+    #Quiz{
+        margin: 2em auto 2em auto;
+        text-align: center;
+        background-color: #7f7f7f;
+        border-radius: 10%;
+        color: #FFFFFF;
+        width: 50%;
+    }
+    #formali{
+        padding: 1em;
+        margin-top: 0.5em;
+        background-color: #7f7f7f;
+        width: 90%;
+        border-bottom: 2px solid black;
+    }
+
+
+
+
+</style>
 {% endblock %}

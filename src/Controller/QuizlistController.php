@@ -3,18 +3,18 @@
 namespace App\Controller;
 
 use App\Entity\Copies;
-use App\Entity\Formation;
 use App\Entity\Quiz;
 use App\Entity\Reponses;
-use App\Entity\Questions;
 use App\Entity\User;
 use App\Form\ReponseType;
 use App\Repository\CopiesRepository;
 use App\Repository\QuizRepository;
 
+
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -49,16 +49,7 @@ class QuizlistController extends AbstractController
         $quiz = $entityManager->getRepository(Quiz::class)->find($id);
         $questions = $quiz->getQuestions();
         $user = $this->getUser();
-
-
-        $reponsesExistantes = $entityManager->getRepository(Reponses::class)->findBy([
-            'apprenant' => $user
-        ]);
-
-        if ($reponsesExistantes) {
-
-            return $this->redirectToRoute('app_quiz_acceuilA');
-        }
+        
 
         $reponses = [];
         $i = 0;
@@ -124,32 +115,80 @@ class QuizlistController extends AbstractController
             'copies' => $copies,
         ]);
     }
-
-
     /**
-     * @Route("/quiz/{id}/copies", name="correction_quiz")
+     * @Route("/user/copies", name="liste_copies_appre")
      */
-    public function correctionQuiz (EntityManagerInterface $entityManager,Request $request,  Copies $id): Response
+    public function listeCopiesapp(CopiesRepository $copiesRepository, Security $security): Response
     {
-        $copy = $entityManager->getRepository(Copies::class)->find($id);
+        $user = $security->getUser();
 
-        if (!$copy) {
-            throw $this->createNotFoundException('Copy not found');
+        if ($user && in_array('ROLE_APPRE', $user->getRoles())) {
+            $copies = $copiesRepository->findBy(['iduser' => $user]);
+        } else {
+            $copies = [];
         }
 
-        $quiz = $copy->getIdquiz();
-        $questions = $quiz->getQuestions();
-        $reponses = $copy->getReponses();
-
-        return $this->render('Correction/correction_quiz.html.twig', [
-            'copy' => $copy,
-            'quiz' => $quiz,
-            'questions' => $questions,
-            'reponses' => $reponses,
+        return $this->render('Correction/liste_copies_user.html.twig', [
+            'user' => $user,
+            'copies' => $copies,
         ]);
     }
 
 
+
+
+
+    /**
+     * @Route("/copie/correction/{id}", name="app_copie_correction")
+     */
+    public function correctionQuiz(Copies $copie): Response
+    {
+
+        return $this->render("Correction/correction_quiz.html.twig", [
+            "controller_name"=> "Correction de la copie",
+            "questions" => $copie->getIdquiz()->getQuestions(),
+            "reponses" => $copie->getReponses(),
+            "copie" => $copie,
+            "quiz" => $copie->getIdquiz(),
+            "quizNoteMax" => $copie->getIdquiz()->getNoteMaximale(),
+        ]);
+    }
+
+    #[Route('/copie/correction/flush/{id}', name: 'app_copie_correction_flush')]
+    public function CopieCorrectionFlush(Copies $copie,EntityManagerInterface $manager, \Symfony\Component\HttpFoundation\Request $request): Response
+    {
+        $reponses=$copie->getReponses();
+        // on récupère la donnée qui a la clé "annotation-copie" dans la requête et on l'enregistre dans annotation copie
+        $annotationCopie = $request->get('annotation-copie');
+        $copie->setAnnotationGlobale($annotationCopie);
+        // on récupère la donnée qui a la clé "annotation-note" dans la requête et on la pour dans annotation copie
+        $noteCopie = $request->get('note-copie');
+        $copie->setNoteMaxQuiz($noteCopie);
+
+        // on boucle sur la requête sous forme de tableau, avec $key= "le nom du champ de formulaire" et value= "sa valeur"
+        foreach ($request->request->all() as $key=>$value){
+            // si la clé est différente de "annotation-copie" et "note-copie"
+            if($key !== "annotation-copie" && $key !== "note-copie"){
+
+                // on décompose la chaine de caractère de la clé avec le "-"  comme élément séparateur
+                $explode=explode( "-", $key );
+                //on cherche la 1ère réponse qui à l'ID = à $explode[1]
+                $reponse = $reponses->findFirst(function(int $index, Reponses $reponse) use($explode): bool {
+                    return $reponse->getId() == $explode[1];
+                });
+                // on vérifie que $explode[0] = à "annotation" avant d'envoyer  la valeur dans la table annotation
+                if ("annotation" == $explode[0]){
+                    $reponse->setAnnotationQuestion($value);
+                }
+                // on vérifie que $explode[0] = à "note" avant d'envoyer  la valeur dans la table annotation
+                elseif("note"== $explode[0]){
+                    $reponse->setNoteReponse($value);
+                }
+            }
+        }
+        $manager->flush();
+        return $this->redirectToRoute('liste_eleves');
+    }
 
 }
 

@@ -3,21 +3,23 @@
 {% block title %}Hello CopieSuiviController!{% endblock %}
 
 {% block body %}
+    <div id="CopiesCorrection">
     {% if is_granted('ROLE_FORMA') %}
 
         {% for question in questions %}
-            <p class="question-description">{{ question.question }} {{ question.noteMaximalequestion }}</p>
+            <div class="questionpoints" ><p class="question-description">{{ question.question }}     (Point question : {{ question.noteMaximalequestion }})</p> </div>
             {% for reponse in reponses %}
+                <form action="{{path('app_copie_correction_flush', {'id': copie.id }) }}" method="post">
                 {% if reponse.idQuestion.getId() == question.id %}
-                    <p>Réponse : {{ reponse.getReponse() }}</p>
-                    <div>
-                        Annotation : <br/>
+                    <p id="reponseelève">Réponse élève : {{ reponse.getReponse() }}</p>
+                    <div class="annotationforma">
+                        Annotation :
                         <label>
                             <input name="annotation-{{ reponse.id }}">{{ reponse.annotationQuestion }}</input>
                         </label>
                     </div>
-                    <div>
-                        Note de la question : <br/>
+                    <div class="annotationforma">
+                        Note de la question :
                         <label>
                             <input name="note-{{ reponse.id }}" value="{{ reponse.noteReponse }}" type="number" min="0" max="{{ question.noteMaximalequestion }}"/>
                         </label>
@@ -26,43 +28,117 @@
                 {% endif %}
             {% endfor %}
         {% endfor %}
-
-        <h1>Annotation générale</h1>
+        <div class="annotationglobal">
+        <h3>Annotation générale du Formateur</h3>
         <label>
             <textarea name="annotation-copie">{{ copie.annotationGlobale }}</textarea>
         </label>
 
-        <h1>Note de la copie</h1>
+        <h3>Note de la copie</h3>
         <label>
             <input name="note-copie" value="{{ copie.noteMaxQuiz }}" type="number" min="0" max="{{ quizNoteMax }}"/>
         </label>
         <br/>
-        <button type="submit">Valider</button>
+        <button id='submit'  type="submit">Valider</button>
+        </div> </form>
 
     {% endif %}
 
+    </div>
+    <div id="CopiesCorrection">
     {% if is_granted('ROLE_APPRE') %}
 
         {% for question in questions %}
-            <p class="question-description">{{ question.getQuestion() }} {{ question.getNoteMaximalequestion() }}</p>
+            <div class="questionpoints" ><p class="question-description">{{ question.getQuestion() }} {{ question.getNoteMaximalequestion() }}</p></div>
             {% for reponse in question.getIdqreponses() %}
-                <p>Réponse : {{ reponse.getReponse() }}</p>
-                <div>
-                    Annotation : <br/>
+                <p id="reponseelève">Réponse : {{ reponse.getReponse() }}</p>
+                <div class="annotationforma">
+                    Annotation :
                     {{ reponse.getAnnotationQuestion() }}
-                </div>
-                <div>
-                    Note de la question : <br/>
+
+                    Note de la question :
                     {{ reponse.getNoteReponse() }}
                 </div>
 
             {% endfor %}
         {% endfor %}
-
-        <h1>Annotation générale</h1>
+        <div class="annotationglobal">
+        <h3>Annotation générale</h3>
         {{ copie.getAnnotationGlobale() }}
 
-        <h1>Note de la copie</h1>
+        <h3>Note de la copie</h3>
         {{ copie.getNoteMaxQuiz() }}
+        </div>
+        <div id="Retour"> <a  id='submit2' href="{{ path('app_quiz_acceuilA') }}"> retour</a> </div>
     {% endif %}
+    </div>
+
+
+<style>
+.questionpoints{
+    color: #FFFFFF;
+    background-color: #7f7f7f;
+    padding: 0.5em;
+    margin-top: 1em;
+    text-align: center;
+}
+#reponseelève{
+    background-color: #cccccc;
+    padding: 0.5em;
+    margin-top: 0;
+    margin-bottom: 0;
+    text-align: center;
+}
+.annotationforma{
+   background-color: #535353;
+   padding: 0.5em;
+   text-align: center;
+   color: #FFFFFF;
+    margin-top: 0;
+}
+#CopiesCorrection{
+
+    width: 50%;
+    margin: auto;
+}
+.annotationglobal{
+   text-align: center;
+   margin: auto;
+    width: 50%;
+    background-color: #535353;
+    color: #FFFFFF;
+
+}
+#submit {
+
+    border-radius: 25%;
+    background-color: #7f7f7f;
+    color: rgb(255, 255, 255);
+    padding: 14px 20px;
+    margin: 1em 0;
+    border: 1px solid black;
+    cursor: pointer;
+    width: 30%;
+}
+#submit:hover {
+    background-color: white;
+    color: #000000;
+    border: 1px solid black;
+}
+#submit2{
+    border-radius: 25%;
+    text-decoration: none;
+    background-color: #535353;
+    color: rgb(255, 255, 255);
+    padding: 14px 20px;
+    border: 1px solid #7f7f7f;
+    cursor: pointer;
+
+}
+#submit2:hover {
+    background-color: white;
+    color: #000000;
+    border: 1px solid #FFDC14;
+}
+</style>
 {% endblock %}

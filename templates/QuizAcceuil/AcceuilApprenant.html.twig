@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% if is_granted('ROLE_APPRE') %}
-   <div class="login" > <a  href="{{ path('app_logout') }}">Déconnexion</a> </div>
+   <div class="Bouton" > <a  href="{{ path('app_logout') }}">Déconnexion</a> </div>
 {% endif %}
 
 <br><br>
@@ -17,20 +17,12 @@
 <style>
    h1{
       text-align: center;
+      margin-top: 2em;
    }
-   .login{
-      text-decoration: none;
-      color: black;
-      margin-left: 90%;
-      border: black solid 2px;
-      padding: 1%;
-      background-color: black;
-      text-align: center;
-   }
+
    .Bouton{
-      margin-left:45%;
-      margin-right:45%;
-      margin-bottom: 2em;
+      margin: 2em auto;
+      width: 20%;
       border: black solid 2px;
       padding: 1%;
       background-color: black;

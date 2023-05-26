@@ -3,23 +3,97 @@
 {% block title %}Modifier le quiz{{ parent() }}{% endblock %}
 
 {% block body %}
-    <h1>Modifier le quiz</h1>
+    <div id="Quiz"> <h1 id="Titre">Modification du quiz</h1>
 
-    {{ form_start(form) }}
+        {{ form_start(form) }}
 
-    {{ form_row(form.titre) }}
+        <p class="DesignForm">
+            <label>{{ form_label(form.titre) }}</label>
+            {{ form_widget(form.titre) }}
+        </p>
 
-    {{ form_row(form.description) }}
+        <p class="DesignForm">
+            <label>{{ form_label(form.description) }}</label>
+            {{ form_widget(form.description) }}
+        </p>
 
-    {{ form_row(form.note_maximale) }}
+        <p class="DesignForm">
+            <label>{{ form_label(form.note_maximale) }}</label>
+            {{ form_widget(form.note_maximale) }}
+        </p>
 
-    {{ form_row(form.date_debut) }}
+        <p class="DesignForm">
+            <label>{{ form_label(form.date_debut) }}</label>
+            {{ form_widget(form.date_debut) }}
+        </p>
 
-    {{ form_row(form.date_fin) }}
+        <p class="DesignForm">
+            <label>{{ form_label(form.date_fin) }}</label>
+            {{ form_widget(form.date_fin) }}
+        </p>
 
-    {{ form_row(form.formation) }}
+        <p class="DesignForm">
+            <label>{{ form_label(form.formation) }}</label>
+            {{ form_widget(form.formation) }}
+        </p>
 
-    <button type="submit" class="btn btn-primary">Enregistrer</button>
-    <a href="{{ path('app_quiz_acceuilF') }}">Annuler</a>
-    {{ form_end(form) }}
+        <button  id='submit' type="submit" class="btn btn-primary">Enregistrer</button>
+
+        {{ form_end(form) }} </div>
+    <div id="Retour"> <a  id='submit2' href="{{ path('app_quiz_acceuilF') }}"> Annuler</a> </div>
+    <style>
+        #Titre{
+            text-align: center;
+        }
+        #Quiz{
+            margin: auto;
+            text-align: center;
+            background-color: #7f7f7f;
+            border-radius: 20%;
+            color: #FFFFFF;
+            width: 30%;
+        }
+        .DesignForm{
+            margin-bottom: 1em;
+        }
+        .DesignForm label {
+            margin-right: 1em;
+
+        }
+        #submit {
+            border-radius: 25%;
+            background-color: #535353;
+            color: rgb(255, 255, 255);
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: 1px solid #7f7f7f;
+            cursor: pointer;
+            width: 30%;
+        }
+        #submit:hover {
+            background-color: white;
+            color: #000000;
+            border: 1px solid #FFDC14;
+        }
+        #submit2{
+            border-radius: 25%;
+            text-decoration: none;
+            background-color: #535353;
+            color: rgb(255, 255, 255);
+            padding: 14px 20px;
+            border: 1px solid #7f7f7f;
+            cursor: pointer;
+
+        }
+        #submit2:hover {
+            background-color: white;
+            color: #000000;
+            border: 1px solid #FFDC14;
+        }
+        #Retour{
+            margin-top: 10%;
+            text-align: center;
+        }
+    </style>
+
 {% endblock %}

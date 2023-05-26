@@ -3,10 +3,49 @@
 {% block title %}Liste des quiz{% endblock %}
 
 {% block body %}
-<h1>élèves</h1>
+<h1 align="center">Liste des élèves</h1>
 
             {% for user in users  %}
-
-                <li><a href="{{ path('liste_copies_user', {'id': user.id}) }}">{{ user.Username }}</a></li>
+                {% if 'ROLE_APPRE' in user.roles %}
+                    <p><a href="{{ path('liste_copies_user', {'id': user.id}) }}">{{ user.Username }}</a></p>
+                {% endif %}
             {% endfor %}
+
+
+    <div id="Retour"> <a  id='submit2' href="{{ path('app_quiz_acceuilF') }}"> retour</a> </div>
+
+<style>
+ p{
+     padding: 2em;
+     background-color: #7f7f7f;
+     margin: 1em auto 1em auto;
+     text-align: center;
+     width: 30%;
+ }
+ a{
+     text-decoration: none;
+     color: white;
+ }
+ #Retour{
+     margin-top: 10%;
+     text-align: center;
+ }
+ #submit2{
+     border-radius: 25%;
+     text-decoration: none;
+     background-color: #535353;
+     color: rgb(255, 255, 255);
+     padding: 14px 20px;
+     border: 1px solid #7f7f7f;
+     cursor: pointer;
+
+ }
+ #submit2:hover {
+     background-color: white;
+     color: #000000;
+     border: 1px solid #FFDC14;
+ }
+
+
+</style>
 {% endblock %}
